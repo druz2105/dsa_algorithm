@@ -8,47 +8,53 @@ class Node {
     }
 }
 
-class LinkedList{
+class CircularLinkedList{
     constructor() {
         this.head = null;
     }
 
     apendData(data){
+        console.log(data)
         const newNode = new Node(data);
         if (this.head === null) {
             this.head = newNode;
         } else {
             let current = this.head;
-            while (current.next !== null) {
+            while (current.next !== this.head) {
                 current = current.next;
             }
             current.next = newNode;
         }
+        newNode.next = this.head
     }
 
     searchNodeByValue(value){
-        let current = this.head
-        let index = 0
-        while(current !== null){
+        let current = this.head;
+        let index = 0;
+
+        do {
             if(current.returnData() === value){
                 return [current, index]
             }
             index += 1
             current = current.next;
-        }
+
+        } while (current !== this.head);
         return [null, -1]
     }
 
     searchNodeByIndex(targetIndex){
         let current = this.head
         let index = 0
-        while(current !== null){
+
+        do {
             if(index === targetIndex){
                 return [current, index]
             }
             index += 1
             current = current.next;
-        }
+
+        } while (current !== this.head);
         return [null, -1]
     }
 
@@ -68,12 +74,6 @@ class LinkedList{
         } else {
             console.log(`Index out of range, can not update data.`)
         }
-    }
-
-    updateNode(node, newValue){
-        let oldValue = node.data
-        node.data = newValue
-        console.log(`${oldValue} is updated to ${newValue}.`)
     }
 
     insertNodeAfterIndex(insertIndex, value){
@@ -107,91 +107,142 @@ class LinkedList{
         console.log("new node had been added successfully.")
     }
 
-    removeDataByValue(value){
-        let parent;
-        let current = this.head
-        while(current !== null){
-            if(current.returnData() === value){
-                if(parent === undefined){
-                    this.head = current.next
+    updateNode(node, newValue){
+        let oldValue = node.data
+        node.data = newValue
+        console.log(`${oldValue} is updated to ${newValue}.`)
+    }
+
+    removeDataByValue(value) {
+        let parent ;
+        let removedHead;
+        let current = this.head.next;
+
+
+        if (!current) {
+            console.log("List is empty.");
+            return;
+        }
+
+        do {
+            if (current.returnData() === value) {
+                console.log(`${value} is removed from the list.`);
+                if (!parent) {
+                    removedHead = current
+                    this.head = current.next;
                 } else {
-                    parent.next = current.next
+                    parent.next = current.next;
                 }
             }
-            parent = current
+            parent = current;
             current = current.next;
+
+        } while (current !== this.head);
+
+        if (removedHead && this.head) {
+            let current = this.head;
+            while (current.next !== removedHead) {
+                current = current.next;
+            }
+            current.next = this.head
         }
     }
+
 
     removeDataAtIndex(findIndex){
         let parent;
-        let current = this.head
-        let currentIndex = 0
-        while(current !== null){
-            if(currentIndex === findIndex){
-                if(parent === undefined){
-                    this.head = current.next
+        let removedHead;
+        let currenIndex = 0;
+        let current = this.head;
+
+        if (!current) {
+            console.log("List is empty.");
+            return;
+        }
+
+        do {
+            if (findIndex === currenIndex) {
+                console.log(`${current.returnData()} is removed from the list.`);
+                if (!parent) {
+                    removedHead = current
+                    this.head = current.next;
                 } else {
-                    parent.next = current.next
+                    parent.next = current.next;
                 }
             }
-            parent = current
+            parent = current;
             current = current.next;
-            currentIndex += 1;
+            currenIndex += 1
+
+        } while (current !== this.head);
+
+        if (removedHead && this.head) {
+            let current = this.head;
+            while (current.next !== removedHead) {
+                current = current.next;
+            }
+            current.next = this.head
         }
     }
 
-    display(){
+    display() {
         if (this.head === null) {
             console.log("Linked List is empty");
             return;
         }
-        let current = this.head
-        let linkedListString = ""
-        while(current !== null){
-            if(current.next === null){
-                linkedListString += `${current.returnData()}`
+
+        let current = this.head;
+        let linkedListString = '';
+
+        do {
+            if (current.next === this.head) {
+                linkedListString += `${current.returnData()}`;
             } else {
-                linkedListString += `${current.returnData()} => `
+                linkedListString += `${current.returnData()} => `;
             }
-            current = current.next
-        }
-        console.log(linkedListString)
+
+            current = current.next;
+
+        } while (current !== this.head);
+        console.log(linkedListString);
     }
+
 }
 
-const ll = new LinkedList()
+const cl = new CircularLinkedList()
 
-ll.apendData(5)
-ll.apendData(4)
-ll.apendData(3)
-ll.display()
+cl.apendData(5)
+cl.apendData(4)
+cl.apendData(3)
+cl.display()
 
-ll.updateNodeByValue(4, 6)
-ll.display()
+cl.updateNodeByValue(4, 6)
+cl.display()
 
-ll.updateNodeAtIndex(0, 1)
-ll.display()
+cl.updateNodeAtIndex(0, 1)
+cl.display()
 
 const searchValue = 6
-if(ll.searchNodeByValue(searchValue)[1] !== -1){
+if(cl.searchNodeByValue(searchValue)[1] !== -1){
     console.log(`${searchValue} is there in the list.`)
 } else {
     console.log(`${searchValue} is not in the  list.`)
 }
 
 
-ll.insertNodeAfterValue(6, 7)
-ll.display()
+cl.insertNodeAfterValue(6, 7)
+cl.display()
 
-ll.insertNodeAfterIndex(0, 2)
-ll.insertNodeAfterIndex(10, 2)
-ll.display()
+cl.insertNodeAfterIndex(0, 2)
+cl.display()
 
-ll.removeDataByValue(7)
-ll.display()
+cl.insertNodeAfterIndex(10, 2)
+cl.display()
 
-ll.removeDataAtIndex(0)
-ll.display()
+cl.removeDataByValue(7)
+cl.display()
 
-ll.removeDataAtIndex(10)
+cl.removeDataAtIndex(0)
+cl.display()
+
+cl.removeDataAtIndex(10)
