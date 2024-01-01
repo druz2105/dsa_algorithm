@@ -6,7 +6,7 @@
         - the array above can be used to show options to user for selection.
         - In javascript be declared with `Array()` or simply by using `[]`.
         - In JavaScript and Python, arrays are not bound to specific data types. This means that unlike some statically typed languages, these programming languages allow arrays to contain elements of different data types within the same array. **However, using typescript we can ensure types.**
-        - For Ex: `const Array = new Array(1, 'two', true, [3, 4], { key: 'value' });`
+        - For Ex: `const Array = Array(1, 'two', true, [3, 4], { key: 'value' });`
 
 - Hash Table
     - Hash tables are simple key value pair that can be declared in JS. like this `const fruit = { apple: 10, mango: 5, pineapple: 20, banana: 24 }`. 
